@@ -1,0 +1,71 @@
+@charset "UTF-8";
+
+/* ==========================================================
+   CS157A Team 2 - Global stylesheet
+   ========================================================== */
+
+/* ---------- Page background and global defaults ---------- */
+body {
+  /* NOTE: this path is relative to THIS css file, not to the JSP page.
+     From /css/style.css, "../images/" resolves to /images/ */
+  background-image: url("../images/background.png");
+  background-size: cover;         /* Scale to fill the whole window */
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;   /* Image stays put while the page scrolls */
+
+  /* Default text color for the entire page. Most elements inherit this. */
+  color: #ffffff;
+
+  font-family: "Segoe UI", Arial, sans-serif;
+  font-size: 16px;
+  line-height: 1.6;
+  margin: 0;
+  padding: 24px;
+  min-height: 100vh;
+  box-sizing: border-box;
+}
+
+/* ---------- Headings ---------- */
+h1, h2, h3 {
+  color: #ffffff;
+  text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.8);  /* Improve contrast over the image */
+  margin-top: 0;
+}
+
+/* ---------- Links do NOT inherit color, so set them explicitly ---------- */
+a          { color: #7ec8ff; }
+a:visited  { color: #c9a0ff; }
+a:hover    { color: #ffffff; }
+
+/* ---------- Reusable content panel ---------- */
+.panel {
+  background-color: rgba(0, 0, 0, 0.55);   /* Dark translucent backdrop */
+  border-radius: 8px;
+  padding: 20px;
+  max-width: 900px;
+}
+
+/* ---------- Data table ---------- */
+table {
+  border-collapse: collapse;
+  background-color: rgba(0, 0, 0, 0.6);
+  width: 100%;
+  max-width: 900px;
+}
+th, td {
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  padding: 8px 12px;
+  color: #ffffff;
+}
+th {
+  background-color: rgba(0, 0, 0, 0.8);
+  text-align: left;
+}
+
+/* ---------- Form controls do NOT inherit font or color ---------- */
+input, select, textarea, button {
+  font-family: inherit;
+  font-size: inherit;
+  color: #000000;   /* Keep dark text on the control's light background */
+}

@@ -2,10 +2,11 @@
 
 <html>
 <head>
-  <title>Three Tier Architecture Demo</title>
+  <title>Pitwall</title>
+  <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
 </head>
 <body>
-<h1>3-Tier Architecture -- JDBC Connection Example</h1>
+<h1>Pitwall SQL Database</h1>
 
 <table border="1">
   <tr>
@@ -17,7 +18,7 @@
         /* My Configurations */
         String hostname = "localhost"; // Valid Values: "localhost" OR "127.0.0.1"
         String sql_port = "3306";  // Default port is 3306
-        String database = "xxx_your_last_name_xxx";
+        String database = "liu";
         String username = "root";
         String password = "xxxxxxxxxx";
         String table_name = "student";
