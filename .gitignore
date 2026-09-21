@@ -1,0 +1,16 @@
+# Maven / build output
+target/
+build/
+
+# Eclipse metadata (machine-specific absolute paths; each member regenerates these)
+.settings/
+.classpath
+.project
+.factorypath
+
+# Manually added jars - use Maven dependencies instead
+src/main/webapp/WEB-INF/lib/
+
+# OS
+Thumbs.db
+.DS_Store
