@@ -8,6 +8,26 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 /**
  * Loads database settings from myConfig.json on the classpath.
  * This file is git-ignored, so each team member keeps their own copy.
+ * 
+ * 
+ * Example of using MyConfig:
+
+import cs157a.util.MyConfig;  // Step 01: import MyConfig
+
+public class MyTest {
+	public static void main(String [] args) {
+		// Step 02: Use the singleton method get(key) to get the value
+		String database_name = MyConfig.get("database_name");
+		String database_user = MyConfig.get("database_user");
+		String database_pswd = MyConfig.get("database_pswd");
+		
+		System.out.println("database_name: " + database_name);
+		System.out.println("database_user: " + database_user);
+		System.out.println("database_pswd: " + database_pswd);
+				
+	} //END main()
+} //END public class MyTest
+
  */
 public class MyConfig {
 

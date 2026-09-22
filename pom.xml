@@ -24,7 +24,7 @@
     <dependency>
       <groupId>com.mysql</groupId>
       <artifactId>mysql-connector-j</artifactId>
-      <version>9.7.0</version>
+      <version>26.7.0</version>
     </dependency>
 
     <!-- 3. Servlet API: needed for writing Servlets / JSP.

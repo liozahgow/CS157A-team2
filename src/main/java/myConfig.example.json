@@ -1,0 +1,8 @@
+{
+  "_comment": "Copy this file to myConfig.json in the same folder and fill in your own MySQL user and password. myConfig.json is git-ignored, so your password never reaches GitHub.",
+  "hostname": "localhost",
+  "sql_port": "3306",
+  "database_name": "pitwall",
+  "database_user": "root",
+  "database_pswd": "xxx_YOUR_PASSWORD_xxx"
+}

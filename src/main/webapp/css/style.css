@@ -69,3 +69,28 @@ input, select, textarea, button {
   font-size: inherit;
   color: #000000;   /* Keep dark text on the control's light background */
 }
+/* ---------- Small helpers used by index.jsp and home.jsp ---------- */
+.panel {
+  margin-bottom: 20px;     /* space between the two panels on the home page */
+}
+
+.error {
+  color: #ff9a9a;          /* readable red against the dark backdrop */
+  font-weight: bold;
+}
+
+.hint {
+  color: #cfd6de;          /* dimmer than body text, still high contrast */
+  font-size: 14px;
+}
+
+code {
+  background-color: rgba(255, 255, 255, 0.15);
+  padding: 1px 5px;
+  border-radius: 3px;
+}
+
+button {
+  padding: 6px 14px;
+  cursor: pointer;
+}
