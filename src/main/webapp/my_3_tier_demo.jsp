@@ -16,9 +16,10 @@
   </tr>
     <%
         /* My Configurations */
+        
         String hostname = "localhost"; // Valid Values: "localhost" OR "127.0.0.1"
         String sql_port = "3306";  // Default port is 3306
-        String database = "liu";
+        String database = "xxx_your_db_name_xxx";
         String username = "root";
         String password = "xxxxxxxxxx";
         String table_name = "student";

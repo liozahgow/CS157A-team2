@@ -1,3 +1,7 @@
+# Local DB credentials - never commit this
+myConfig.json
+
+
 # Maven / build output
 target/
 build/
@@ -14,3 +18,5 @@ src/main/webapp/WEB-INF/lib/
 # OS
 Thumbs.db
 .DS_Store
+
+
