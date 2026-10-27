@@ -14,7 +14,11 @@ public class User {
     private String  email;
     private String  displayName;
     private String  phone;
-    private Integer driverNumber;  // NULL for anyone who is not a driver
+
+    // Not a column of users. It is stored in the drivers table and brought in
+    // by a LEFT JOIN, so it is null for anyone who is not a driver.
+    private Integer driverNumber;
+
     private String  role;
     private boolean active;
 

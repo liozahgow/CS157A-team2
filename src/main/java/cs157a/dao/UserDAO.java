@@ -27,10 +27,14 @@ public class UserDAO {
      */
     public User findByEmailAndPassword(String email, String plainPassword) throws SQLException {
 
-        String sql = "SELECT user_id, team_id, email, password_hash, display_name, "
-                   + "       phone, driver_number, role, active "
-                   + "FROM users "
-                   + "WHERE email = ? AND active = 1";
+        // driver_number lives in the drivers table, which is where the design
+        // report puts it. The LEFT JOIN brings it back for a driver and leaves
+        // it NULL for everybody else, so the rest of the app is unaffected.
+        String sql = "SELECT u.user_id, u.team_id, u.email, u.password_hash, u.display_name, "
+                   + "       u.phone, d.driver_number, u.role, u.active "
+                   + "FROM users u "
+                   + "LEFT JOIN drivers d ON u.user_id = d.user_id "
+                   + "WHERE u.email = ? AND u.active = 1";
 
         try (Connection con = Db.get();
              PreparedStatement ps = con.prepareStatement(sql)) {
@@ -59,10 +63,11 @@ public class UserDAO {
      */
     public User findById(int userId) throws SQLException {
 
-        String sql = "SELECT user_id, team_id, email, display_name, "
-                   + "       phone, driver_number, role, active "
-                   + "FROM users "
-                   + "WHERE user_id = ?";
+        String sql = "SELECT u.user_id, u.team_id, u.email, u.display_name, "
+                   + "       u.phone, d.driver_number, u.role, u.active "
+                   + "FROM users u "
+                   + "LEFT JOIN drivers d ON u.user_id = d.user_id "
+                   + "WHERE u.user_id = ?";
 
         try (Connection con = Db.get();
              PreparedStatement ps = con.prepareStatement(sql)) {
@@ -97,26 +102,29 @@ public class UserDAO {
     }
 
     /**
-     * Saves the editable profile fields (FR2): display name, phone and
-     * driver_number. driver_number is copied here from the drivers table so
-     * the two never disagree - see updateDriverNumber.
+     * Saves the editable profile fields that belong to users (FR2): display
+     * name and phone. The car number is not here, because it belongs to the
+     * drivers table - see updateDriverNumber.
      */
     public void updateProfile(Connection con, User user) throws SQLException {
 
         String sql = "UPDATE users "
-                   + "SET display_name = ?, phone = ?, driver_number = ? "
+                   + "SET display_name = ?, phone = ? "
                    + "WHERE user_id = ?";
 
         try (PreparedStatement ps = con.prepareStatement(sql)) {
             ps.setString(1, user.getDisplayName());
             ps.setString(2, user.getPhone());
-            ps.setObject(3, user.getDriverNumber(), Types.INTEGER);
-            ps.setInt(4, user.getUserId());
+            ps.setInt(3, user.getUserId());
             ps.executeUpdate();
         }
     }
 
-    /** Changes a driver's car number in drivers, where FR2 says it lives. */
+    /**
+     * Changes a driver's car number. The drivers table is the only place it is
+     * stored, so there is nothing to keep in step anywhere else.
+     * The column is NOT NULL, so callers must pass a real number.
+     */
     public void updateDriverNumber(Connection con, int userId, int driverNumber) throws SQLException {
 
         String sql = "UPDATE drivers SET driver_number = ? WHERE user_id = ?";
@@ -159,9 +167,11 @@ public class UserDAO {
     /** Adds the users row for a new account (FR1). Returns the generated user_id. */
     public int insert(Connection con, User user, String passwordHash) throws SQLException {
 
+        // The car number is not inserted here. insertRoleRow writes it into
+        // the drivers table, which is the only place it is stored.
         String sql = "INSERT INTO users "
-                   + "(team_id, email, password_hash, display_name, phone, driver_number, role) "
-                   + "VALUES (?, ?, ?, ?, ?, ?, ?)";
+                   + "(team_id, email, password_hash, display_name, phone, role) "
+                   + "VALUES (?, ?, ?, ?, ?, ?)";
 
         try (PreparedStatement ps = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
@@ -170,10 +180,7 @@ public class UserDAO {
             ps.setString(3, passwordHash);
             ps.setString(4, user.getDisplayName());
             ps.setString(5, user.getPhone());
-
-            // setObject writes SQL NULL for a null Integer; setInt cannot.
-            ps.setObject(6, user.getDriverNumber(), Types.INTEGER);
-            ps.setString(7, user.getRole());
+            ps.setString(6, user.getRole());
             ps.executeUpdate();
 
             try (ResultSet keys = ps.getGeneratedKeys()) {

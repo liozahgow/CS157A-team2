@@ -59,6 +59,14 @@
   </p>
   <% } %>
 
+  <%-- Engineering pages (FR9). A manager may use them too. --%>
+  <% if ("Engineer".equals(user.getRole()) || "Manager".equals(user.getRole())) { %>
+  <p>
+    Engineering:
+    <a href="${pageContext.request.contextPath}/app/setups">Best setup search</a>
+  </p>
+  <% } %>
+
 
 <%-- ------------------------------ result area ------------------------------ --%>
 <div class="panel">

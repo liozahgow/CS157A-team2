@@ -24,8 +24,8 @@ public class ProfileService {
      * Reads display name, phone and driver number from user. newPassword is
      * null when the user left the new-password box empty.
      *
-     * For a driver the number is written to drivers (where FR2 says it lives)
-     * and copied to users.driver_number so the two never disagree.
+     * For a driver the car number is written to the drivers table, which is
+     * the only place it is stored.
      */
     public boolean updateProfile(User user, String currentPassword, String newPassword)
             throws SQLException {
@@ -43,7 +43,11 @@ public class ProfileService {
 
                 userDao.updateProfile(con, user);
 
-                if ("Driver".equals(user.getRole())) {
+                // drivers.driver_number is NOT NULL: every driver has a car
+                // number. A null here means the caller did not supply one, so
+                // the stored number is left as it was rather than letting the
+                // database reject the whole edit.
+                if ("Driver".equals(user.getRole()) && user.getDriverNumber() != null) {
                     userDao.updateDriverNumber(con, user.getUserId(), user.getDriverNumber());
                 }
 

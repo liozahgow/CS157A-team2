@@ -21,7 +21,7 @@ SET SQL_SAFE_UPDATES = 0;
 
 -- --------------------------------------------------------------- clear data --
 -- Delete child rows before parent rows so foreign-key constraints are satisfied.
-DELETE FROM uses;
+DELETE FROM session_tire_usages;
 DELETE FROM laps;
 DELETE FROM sessions;
 DELETE FROM events;
@@ -67,111 +67,111 @@ INSERT INTO teams (team_name, series, invite_code, status) VALUES
 --   team 10: manager 29, engineer 30, driver 31
 
 INSERT INTO users
-(team_id, email, password_hash, display_name, phone, driver_number, role)
+(team_id, email, password_hash, display_name, phone, role)
 VALUES
     (NULL, 'admin@pitwall.example',
      'pbkdf2-sha256$210000$oqzXD0u1pTREDzItdZk0eQ==$hZ9d+3DX5QlB9sFUovcLcL5xaTfX8LzXU3pjTKZGta0=',
-     'System Administrator', NULL, NULL, 'Admin'),
+     'System Administrator', NULL, 'Admin'),
 
     (1, 'manager@apex.example',
      'pbkdf2-sha256$210000$Ed9d31jZxyK6Wvn3IE8OxQ==$B9EDMb9HY9WWgMTnsA7XpVXxqM5J6dfVXlFdB/lHw7k=',
-     'Dana Cruz', '408-555-0101', NULL, 'Manager'),
+     'Dana Cruz', '408-555-0101', 'Manager'),
     (1, 'engineer@apex.example',
      'pbkdf2-sha256$210000$gPdINv+Bu691O6uoWO6nXA==$PTHXJMQoDtm9Lil7SqWbgxpROzLU63iyd32wjc/JuDI=',
-     'Ravi Patel', '408-555-0102', NULL, 'Engineer'),
+     'Ravi Patel', '408-555-0102', 'Engineer'),
     (1, 'driver@apex.example',
      'pbkdf2-sha256$210000$k03cxmhN5acf9qYyOwSoVQ==$IbkyK35PSUlAOUcts+mUrwbpzf6gNTIMhtSPI2EUh9I=',
-     'Mia Torres', '408-555-0103', 44, 'Driver'),
+     'Mia Torres', '408-555-0103', 'Driver'),
 
     (2, 'manager@redline.example',
      'pbkdf2-sha256$210000$Ed9d31jZxyK6Wvn3IE8OxQ==$B9EDMb9HY9WWgMTnsA7XpVXxqM5J6dfVXlFdB/lHw7k=',
-     'Elena Brooks', '415-555-0201', NULL, 'Manager'),
+     'Elena Brooks', '415-555-0201', 'Manager'),
     (2, 'engineer@redline.example',
      'pbkdf2-sha256$210000$gPdINv+Bu691O6uoWO6nXA==$PTHXJMQoDtm9Lil7SqWbgxpROzLU63iyd32wjc/JuDI=',
-     'Marcus Lee', '415-555-0202', NULL, 'Engineer'),
+     'Marcus Lee', '415-555-0202', 'Engineer'),
     (2, 'rookie@redline.example',
      'pbkdf2-sha256$210000$Wq2cEwpVGqzCgT+c03IZUA==$byc1Eeo8r5WcCFGf45IY2nmkA5xLA1xmQpiP1QsY/JY=',
-     'Sam Okafor', '415-555-0203', 7, 'Driver'),
+     'Sam Okafor', '415-555-0203', 'Driver'),
 
     (3, 'manager@garage51.example',
      'pbkdf2-sha256$210000$Ed9d31jZxyK6Wvn3IE8OxQ==$B9EDMb9HY9WWgMTnsA7XpVXxqM5J6dfVXlFdB/lHw7k=',
-     'Jorge Ramirez', '650-555-0301', NULL, 'Manager'),
+     'Jorge Ramirez', '650-555-0301', 'Manager'),
     (3, 'engineer@garage51.example',
      'pbkdf2-sha256$210000$gPdINv+Bu691O6uoWO6nXA==$PTHXJMQoDtm9Lil7SqWbgxpROzLU63iyd32wjc/JuDI=',
-     'Hannah Kim', '650-555-0302', NULL, 'Engineer'),
+     'Hannah Kim', '650-555-0302', 'Engineer'),
     (3, 'driver@garage51.example',
      'pbkdf2-sha256$210000$k03cxmhN5acf9qYyOwSoVQ==$IbkyK35PSUlAOUcts+mUrwbpzf6gNTIMhtSPI2EUh9I=',
-     'Liam Chen', '650-555-0303', 23, 'Driver'),
+     'Liam Chen', '650-555-0303', 'Driver'),
 
     (4, 'manager@velocity.example',
      'pbkdf2-sha256$210000$Ed9d31jZxyK6Wvn3IE8OxQ==$B9EDMb9HY9WWgMTnsA7XpVXxqM5J6dfVXlFdB/lHw7k=',
-     'Priya Shah', '510-555-0401', NULL, 'Manager'),
+     'Priya Shah', '510-555-0401', 'Manager'),
     (4, 'engineer@velocity.example',
      'pbkdf2-sha256$210000$gPdINv+Bu691O6uoWO6nXA==$PTHXJMQoDtm9Lil7SqWbgxpROzLU63iyd32wjc/JuDI=',
-     'Ethan Walker', '510-555-0402', NULL, 'Engineer'),
+     'Ethan Walker', '510-555-0402', 'Engineer'),
     (4, 'driver@velocity.example',
      'pbkdf2-sha256$210000$k03cxmhN5acf9qYyOwSoVQ==$IbkyK35PSUlAOUcts+mUrwbpzf6gNTIMhtSPI2EUh9I=',
-     'Sofia Martinez', '510-555-0403', 18, 'Driver'),
+     'Sofia Martinez', '510-555-0403', 'Driver'),
 
     (5, 'manager@nova.example',
      'pbkdf2-sha256$210000$Ed9d31jZxyK6Wvn3IE8OxQ==$B9EDMb9HY9WWgMTnsA7XpVXxqM5J6dfVXlFdB/lHw7k=',
-     'Noah Bennett', '916-555-0501', NULL, 'Manager'),
+     'Noah Bennett', '916-555-0501', 'Manager'),
     (5, 'engineer@nova.example',
      'pbkdf2-sha256$210000$gPdINv+Bu691O6uoWO6nXA==$PTHXJMQoDtm9Lil7SqWbgxpROzLU63iyd32wjc/JuDI=',
-     'Grace Liu', '916-555-0502', NULL, 'Engineer'),
+     'Grace Liu', '916-555-0502', 'Engineer'),
     (5, 'driver@nova.example',
      'pbkdf2-sha256$210000$k03cxmhN5acf9qYyOwSoVQ==$IbkyK35PSUlAOUcts+mUrwbpzf6gNTIMhtSPI2EUh9I=',
-     'Lucas Nguyen', '916-555-0503', 55, 'Driver'),
+     'Lucas Nguyen', '916-555-0503', 'Driver'),
 
     (6, 'manager@summit.example',
      'pbkdf2-sha256$210000$Ed9d31jZxyK6Wvn3IE8OxQ==$B9EDMb9HY9WWgMTnsA7XpVXxqM5J6dfVXlFdB/lHw7k=',
-     'Isabella Rossi', '707-555-0601', NULL, 'Manager'),
+     'Isabella Rossi', '707-555-0601', 'Manager'),
     (6, 'engineer@summit.example',
      'pbkdf2-sha256$210000$gPdINv+Bu691O6uoWO6nXA==$PTHXJMQoDtm9Lil7SqWbgxpROzLU63iyd32wjc/JuDI=',
-     'Daniel Park', '707-555-0602', NULL, 'Engineer'),
+     'Daniel Park', '707-555-0602', 'Engineer'),
     (6, 'driver@summit.example',
      'pbkdf2-sha256$210000$k03cxmhN5acf9qYyOwSoVQ==$IbkyK35PSUlAOUcts+mUrwbpzf6gNTIMhtSPI2EUh9I=',
-     'Chloe Morgan', '707-555-0603', 31, 'Driver'),
+     'Chloe Morgan', '707-555-0603', 'Driver'),
 
     (7, 'manager@ironpeak.example',
      'pbkdf2-sha256$210000$Ed9d31jZxyK6Wvn3IE8OxQ==$B9EDMb9HY9WWgMTnsA7XpVXxqM5J6dfVXlFdB/lHw7k=',
-     'Andre Williams', '408-555-0701', NULL, 'Manager'),
+     'Andre Williams', '408-555-0701', 'Manager'),
     (7, 'engineer@ironpeak.example',
      'pbkdf2-sha256$210000$gPdINv+Bu691O6uoWO6nXA==$PTHXJMQoDtm9Lil7SqWbgxpROzLU63iyd32wjc/JuDI=',
-     'Maya Singh', '408-555-0702', NULL, 'Engineer'),
+     'Maya Singh', '408-555-0702', 'Engineer'),
     (7, 'driver@ironpeak.example',
      'pbkdf2-sha256$210000$k03cxmhN5acf9qYyOwSoVQ==$IbkyK35PSUlAOUcts+mUrwbpzf6gNTIMhtSPI2EUh9I=',
-     'Owen Carter', '408-555-0703', 72, 'Driver'),
+     'Owen Carter', '408-555-0703', 'Driver'),
 
     (8, 'manager@pacific.example',
      'pbkdf2-sha256$210000$Ed9d31jZxyK6Wvn3IE8OxQ==$B9EDMb9HY9WWgMTnsA7XpVXxqM5J6dfVXlFdB/lHw7k=',
-     'Natalie Foster', '831-555-0801', NULL, 'Manager'),
+     'Natalie Foster', '831-555-0801', 'Manager'),
     (8, 'engineer@pacific.example',
      'pbkdf2-sha256$210000$gPdINv+Bu691O6uoWO6nXA==$PTHXJMQoDtm9Lil7SqWbgxpROzLU63iyd32wjc/JuDI=',
-     'Victor Hernandez', '831-555-0802', NULL, 'Engineer'),
+     'Victor Hernandez', '831-555-0802', 'Engineer'),
     (8, 'driver@pacific.example',
      'pbkdf2-sha256$210000$k03cxmhN5acf9qYyOwSoVQ==$IbkyK35PSUlAOUcts+mUrwbpzf6gNTIMhtSPI2EUh9I=',
-     'Ava Thompson', '831-555-0803', 9, 'Driver'),
+     'Ava Thompson', '831-555-0803', 'Driver'),
 
     (9, 'manager@bluearrow.example',
      'pbkdf2-sha256$210000$Ed9d31jZxyK6Wvn3IE8OxQ==$B9EDMb9HY9WWgMTnsA7XpVXxqM5J6dfVXlFdB/lHw7k=',
-     'Carlos Mendes', '925-555-0901', NULL, 'Manager'),
+     'Carlos Mendes', '925-555-0901', 'Manager'),
     (9, 'engineer@bluearrow.example',
      'pbkdf2-sha256$210000$gPdINv+Bu691O6uoWO6nXA==$PTHXJMQoDtm9Lil7SqWbgxpROzLU63iyd32wjc/JuDI=',
-     'Emily Johnson', '925-555-0902', NULL, 'Engineer'),
+     'Emily Johnson', '925-555-0902', 'Engineer'),
     (9, 'driver@bluearrow.example',
      'pbkdf2-sha256$210000$k03cxmhN5acf9qYyOwSoVQ==$IbkyK35PSUlAOUcts+mUrwbpzf6gNTIMhtSPI2EUh9I=',
-     'Mateo Silva', '925-555-0903', 27, 'Driver'),
+     'Mateo Silva', '925-555-0903', 'Driver'),
 
     (10, 'manager@vertex.example',
      'pbkdf2-sha256$210000$Ed9d31jZxyK6Wvn3IE8OxQ==$B9EDMb9HY9WWgMTnsA7XpVXxqM5J6dfVXlFdB/lHw7k=',
-     'Rachel Adams', '669-555-1001', NULL, 'Manager'),
+     'Rachel Adams', '669-555-1001', 'Manager'),
     (10, 'engineer@vertex.example',
      'pbkdf2-sha256$210000$gPdINv+Bu691O6uoWO6nXA==$PTHXJMQoDtm9Lil7SqWbgxpROzLU63iyd32wjc/JuDI=',
-     'Kenji Sato', '669-555-1002', NULL, 'Engineer'),
+     'Kenji Sato', '669-555-1002', 'Engineer'),
     (10, 'driver@vertex.example',
      'pbkdf2-sha256$210000$k03cxmhN5acf9qYyOwSoVQ==$IbkyK35PSUlAOUcts+mUrwbpzf6gNTIMhtSPI2EUh9I=',
-     'Zoe Turner', '669-555-1003', 63, 'Driver');
+     'Zoe Turner', '669-555-1003', 'Driver');
 
 -- ---------------------------------------------------------------- tracks ----
 INSERT INTO tracks (track_name, location, length_km, turns) VALUES
@@ -315,8 +315,8 @@ INSERT INTO laps (session_id, lap_number, lap_time_sec, is_valid) VALUES
     (9, 1,  82.992, 1), (9, 2,  82.510, 1),
     (10,1,  91.663, 1), (10,2,  91.208, 1);
 
--- ---------------------------------------------------------------- uses ------
-INSERT INTO uses (session_id, team_id, set_no, laps_run) VALUES
+-- ------------------------------------------------- session_tire_usages ------
+INSERT INTO session_tire_usages (session_id, team_id, set_no, laps_run) VALUES
     (1,  1,  1, 18),
     (2,  2,  1, 16),
     (3,  3,  1, 22),
@@ -328,3 +328,73 @@ INSERT INTO uses (session_id, team_id, set_no, laps_run) VALUES
     (9,  9,  1, 17),
     (10, 10, 1, 23);
 
+
+
+-- ============================================================================
+-- Extra history for Apex Racing (team 1) at Laguna Seca.
+--
+-- FR9 ranks the setups a team has run at one track, so it needs more than one
+-- setup to rank. These rows give Apex a second car, four more saved setups and
+-- the sessions and lap times they produced, in dry and in wet conditions.
+-- ============================================================================
+
+-- A second Spec Miata, so the class filter still has something to group by.
+INSERT INTO cars (team_id, chassis_no, model, car_class, active) VALUES
+    (1, 'APX-MX5-002', 'Mazda MX-5 ND', 'Spec Miata', 1);
+
+SET @car2 = LAST_INSERT_ID();
+
+INSERT INTO car_setups
+(car_id, setup_name, front_wing_angle, rear_wing_angle, ride_height_mm,
+ tire_pressure_psi, spring_rate, notes)
+VALUES
+    (1,     'Laguna Low Downforce', 2.00,  3.50, 78.00, 29.00, 500.00,
+     'Trimmed out for the back straight; nervous into Turn 2'),
+    (1,     'Laguna Wet',           6.50,  9.00, 90.00, 25.50, 380.00,
+     'Softer springs and lower pressure for standing water'),
+    (@car2, 'Laguna Qualifying',    4.50,  7.00, 80.00, 28.00, 470.00,
+     'One-lap trim, tires drop off after three laps'),
+    (@car2, 'Laguna Race Trim',     4.00,  6.50, 83.00, 28.50, 455.00,
+     'Built for tire life over a full race stint');
+
+SET @setLow  = LAST_INSERT_ID();          -- Laguna Low Downforce
+SET @setWet  = @setLow + 1;
+SET @setQual = @setLow + 2;
+SET @setRace = @setLow + 3;
+
+-- Two more Apex events at the same track, so there is history to compare.
+INSERT INTO events
+(event_name, track_id, team_id, start_date, end_date, event_type)
+VALUES
+    ('Laguna Seca Summer Test', 1, 1, '2026-06-12', '2026-06-12', 'Test Day'),
+    ('Laguna Seca Club Race',   1, 1, '2026-08-21', '2026-08-23', 'Race Weekend');
+
+SET @evSummer = LAST_INSERT_ID();
+SET @evRace   = @evSummer + 1;
+
+INSERT INTO sessions
+(event_id, car_id, setup_id, driver_user_id, session_type, session_date,
+ weather, air_temp_c, driver_feedback)
+VALUES
+    (@evSummer, 1,     @setLow,  4, 'Test',       '2026-06-12', 'Clear',      24.00,
+     'Quick on the straight but will not turn into Turn 2'),
+    (@evSummer, @car2, @setQual, 4, 'Test',       '2026-06-12', 'Clear',      25.50,
+     'Fastest over one lap, falls away after three'),
+    (@evRace,   @car2, @setRace, 4, 'Qualifying', '2026-08-21', 'Sunny',      27.00,
+     'Consistent, easy on the tires'),
+    (@evRace,   1,     @setWet,  4, 'Race',       '2026-08-23', 'Light Rain', 16.50,
+     'Completely different car in the wet, very confident');
+
+SET @sesLow  = LAST_INSERT_ID();
+SET @sesQual = @sesLow + 1;
+SET @sesRace = @sesLow + 2;
+SET @sesWet  = @sesLow + 3;
+
+-- Lap times a Spec Miata really runs at Laguna Seca: low 1:40s when dry,
+-- well into the 1:50s in the rain. One lap is marked invalid on purpose.
+INSERT INTO laps (session_id, lap_number, lap_time_sec, is_valid) VALUES
+    (@sesLow,  1, 102.118, 1), (@sesLow,  2, 101.604, 1), (@sesLow,  3, 101.330, 1),
+    (@sesQual, 1, 101.455, 1), (@sesQual, 2, 100.872, 1), (@sesQual, 3,  99.988, 1),
+    (@sesQual, 4,  98.210, 0),
+    (@sesRace, 1, 101.902, 1), (@sesRace, 2, 101.447, 1), (@sesRace, 3, 101.515, 1),
+    (@sesWet,  1, 117.330, 1), (@sesWet,  2, 115.884, 1), (@sesWet,  3, 115.201, 1);

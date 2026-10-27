@@ -12,7 +12,8 @@ USE pitwall;
 
 SET FOREIGN_KEY_CHECKS = 0;
 
-DROP TABLE IF EXISTS uses;
+DROP TABLE IF EXISTS session_tire_usages;
+DROP TABLE IF EXISTS uses;          -- old name, dropped so an existing database upgrades cleanly
 DROP TABLE IF EXISTS laps;
 DROP TABLE IF EXISTS sessions;
 DROP TABLE IF EXISTS events;
@@ -46,7 +47,6 @@ CREATE TABLE users (
     password_hash VARCHAR(255) NOT NULL,
     display_name  VARCHAR(100) NOT NULL,
     phone         VARCHAR(20),
-    driver_number INT NULL,
     role          VARCHAR(20)  NOT NULL,
     active        TINYINT(1)   NOT NULL DEFAULT 1,
     created_at    TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -182,7 +182,7 @@ CREATE TABLE laps (
 
 -- ---------------------------------------------------------------- uses ------
 -- Relationship table between sessions and tire_sets.
-CREATE TABLE uses (
+CREATE TABLE session_tire_usages (
     session_id INT NOT NULL,
     team_id    INT NOT NULL,
     set_no     INT NOT NULL,
