@@ -64,3 +64,10 @@ never read another team's data.
 ### users
 One account, one role, one team. `team_id` is NULL for the system
 administrator because the admin belongs to no team.
+
+## Team invite codes
+│ Apex Racing        │ APEX2026    │
+├────────────────────┼─────────────┤
+│ Redline Motorsport │ RDLN7788    │
+├────────────────────┼─────────────┤
+│ Garage 51          │ GRG51ABC

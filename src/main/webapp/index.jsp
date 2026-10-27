@@ -41,6 +41,18 @@
       <p class="error">Please log in first.</p>
   <% } %>
 
+  <%-- RegisterServlet redirects here with ?registered=... after a sign-up. --%>
+  <% String registered = request.getParameter("registered"); %>
+  <% if ("ok".equals(registered)) { %>
+      <p class="hint">Account created. You can log in now.</p>
+  <% } else if ("pending".equals(registered)) { %>
+      <p class="hint">Account created. Your new team is waiting for administrator approval.</p>
+  <% } %>
+
+  <p>
+    New to Pitwall? <a href="${pageContext.request.contextPath}/register">Create an account</a>
+  </p>
+
   <p class="hint">
     Test account: <code>manager@apex.example</code> / <code>manager123</code>
     (see db/README.md for the rest)
