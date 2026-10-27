@@ -8,6 +8,7 @@ import cs157a.dao.TeamDAO;
 import cs157a.dao.UserDAO;
 import cs157a.model.Team;
 import cs157a.model.User;
+import cs157a.service.RegistrationService;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -19,7 +20,7 @@ import jakarta.servlet.http.HttpServletResponse;
  * FR1 - account registration.
  *
  *   GET  /register  shows the sign-up form
- *   POST /register  checks the form, then asks UserDAO to create the account
+ *   POST /register  checks the form, then asks RegistrationService to create the account
  *
  * Drivers and engineers join an existing team with its invite code. A manager
  * names a new team instead, which starts as 'Pending' until the administrator
@@ -34,6 +35,8 @@ public class RegisterServlet extends HttpServlet {
 
     private final UserDAO userDao = new UserDAO();
     private final TeamDAO teamDao = new TeamDAO();
+
+    private final RegistrationService registrationService = new RegistrationService();
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -125,7 +128,7 @@ public class RegisterServlet extends HttpServlet {
             }
 
             // ---- 3. Write everything in one transaction -----------------------
-            userDao.register(user, password, newTeamName);
+            registrationService.register(user, password, newTeamName);
 
         } catch (SQLIntegrityConstraintViolationException e) {
             // Someone else took the same email or team name between our check

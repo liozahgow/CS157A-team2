@@ -83,7 +83,7 @@ public class TeamDAO {
      *
      * Takes the caller's Connection instead of opening its own, so the INSERT
      * runs inside the same transaction as the manager's users row - see
-     * UserDAO.register. The team starts as 'Pending' until the administrator
+     * RegistrationService. The team starts as 'Pending' until the administrator
      * approves it.
      */
     public int insert(Connection con, String teamName) throws SQLException {

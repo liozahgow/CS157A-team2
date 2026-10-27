@@ -136,8 +136,9 @@ your-project-root-dir/
 │   │                      maps to "public class Team". No SQL here, ever.
 │   ├── dao/             ★ Data Access Object. THE ONLY PLACE SQL IS ALLOWED. Runs the query,
 │   │                      turns each ResultSet row into a model object, returns a List.
-│   ├── service/         ★ (not created yet) For an action that needs several statements in one
-│   │                      transaction. A single statement goes straight in the DAO.
+│   ├── service/         ★ For an action that needs several statements in one transaction: owns the
+│   │                      Connection and the commit/rollback, calls the DAOs for the SQL.
+│   │                      A single statement goes straight in the DAO.
 │   └── web/
 │       ├── filter/      ★ AuthFilter blocks any /app/ URL when nobody is logged in.
 │       └── *Servlet     ★ Flow control: read the request, pick the query, call the DAO, put the
@@ -223,12 +224,14 @@ use `cs157a.util.Db.get()` instead of building the URL yourself.
 - `AuthFilter` guarding every `/app/` URL
 - One full vertical slice to copy for the other tables:
   schema → seed → model → DAO → servlet → JSP
+- FR1, account registration and login
+- FR2, change account information
 
 **Next**
 
 - The remaining 8 tables: `cars`, `tracks`, `events`, `sessions`,
   `setup_sheets`, `tire_sets`, `session_tire_usages`, `laps`
-- Registration (FR-1) and roster management (FR-3)
+- Roster management (FR-3)
 - `RoleFilter`, so a Driver cannot open Engineer-only pages
 - FR-10 best-setup search — the multi-table JOIN, and the most important query
   in the whole project

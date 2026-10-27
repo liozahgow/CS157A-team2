@@ -10,7 +10,7 @@
       TeamServlet  sets the "teams" list      -> the table is shown
 --%>
 <%@ page contentType="text/html; charset=UTF-8" %>
-<%@ page import="java.util.List, cs157a.model.Team, cs157a.model.User" %>
+<%@ page import="java.util.List, cs157a.model.Team, cs157a.model.User, cs157a.util.Html" %>
 
 <%
     // The user object was put into the session by LoginServlet.
@@ -32,8 +32,10 @@
   <h1>Pitwall</h1>
 
   <p>
-    Signed in as <%= user.getDisplayName() %>
-    (<%= user.getEmail() %>) - role: <%= user.getRole() %>
+    Signed in as <%= Html.escape(user.getDisplayName()) %>
+    (<%= Html.escape(user.getEmail()) %>) - role: <%= Html.escape(user.getRole()) %>
+    &nbsp;|&nbsp;
+    <a href="${pageContext.request.contextPath}/app/profile">My profile</a>
     &nbsp;|&nbsp;
     <a href="${pageContext.request.contextPath}/logout">Log out</a>
   </p>
@@ -75,8 +77,8 @@
     <% for (Team t : teams) { %>
       <tr>
         <td><%= t.getTeamId() %></td>
-        <td><%= t.getTeamName() %></td>
-        <td><%= t.getSeries() %></td>
+        <td><%= Html.escape(t.getTeamName()) %></td>
+        <td><%= Html.escape(t.getSeries()) %></td>
         <td><%= t.getInviteCode() %></td>
         <td><%= t.getStatus() %></td>
         <td><%= t.getCreatedAt() %></td>

@@ -52,6 +52,94 @@ public class UserDAO {
         }
     }
 
+    /**
+     * Loads one user by primary key, or null if there is no such row.
+     * Used by the profile page so it always shows what is in the database,
+     * not what was copied into the session at login.
+     */
+    public User findById(int userId) throws SQLException {
+
+        String sql = "SELECT user_id, team_id, email, display_name, "
+                   + "       phone, driver_number, role, active "
+                   + "FROM users "
+                   + "WHERE user_id = ?";
+
+        try (Connection con = Db.get();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+
+            ps.setInt(1, userId);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                return rs.next() ? mapRow(rs) : null;
+            }
+        }
+    }
+
+    /*
+     * The methods below take the caller's Connection instead of opening their
+     * own, so a service class can run several of them as one transaction -
+     * see cs157a.service.RegistrationService and ProfileService.
+     */
+
+    /** The stored hash for one user, or null if the user does not exist. */
+    public String findPasswordHash(Connection con, int userId) throws SQLException {
+
+        String sql = "SELECT password_hash FROM users WHERE user_id = ?";
+
+        try (PreparedStatement ps = con.prepareStatement(sql)) {
+
+            ps.setInt(1, userId);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                return rs.next() ? rs.getString("password_hash") : null;
+            }
+        }
+    }
+
+    /**
+     * Saves the editable profile fields (FR2): display name, phone and
+     * driver_number. driver_number is copied here from the drivers table so
+     * the two never disagree - see updateDriverNumber.
+     */
+    public void updateProfile(Connection con, User user) throws SQLException {
+
+        String sql = "UPDATE users "
+                   + "SET display_name = ?, phone = ?, driver_number = ? "
+                   + "WHERE user_id = ?";
+
+        try (PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setString(1, user.getDisplayName());
+            ps.setString(2, user.getPhone());
+            ps.setObject(3, user.getDriverNumber(), Types.INTEGER);
+            ps.setInt(4, user.getUserId());
+            ps.executeUpdate();
+        }
+    }
+
+    /** Changes a driver's car number in drivers, where FR2 says it lives. */
+    public void updateDriverNumber(Connection con, int userId, int driverNumber) throws SQLException {
+
+        String sql = "UPDATE drivers SET driver_number = ? WHERE user_id = ?";
+
+        try (PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setInt(1, driverNumber);
+            ps.setInt(2, userId);
+            ps.executeUpdate();
+        }
+    }
+
+    /** Stores a new password. passwordHash must come from PasswordHasher.hash. */
+    public void updatePasswordHash(Connection con, int userId, String passwordHash) throws SQLException {
+
+        String sql = "UPDATE users SET password_hash = ? WHERE user_id = ?";
+
+        try (PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setString(1, passwordHash);
+            ps.setInt(2, userId);
+            ps.executeUpdate();
+        }
+    }
+
     /** True when an account already uses this email. email is UNIQUE. */
     public boolean emailExists(String email) throws SQLException {
 
@@ -68,35 +156,8 @@ public class UserDAO {
         }
     }
 
-    
-    public int register(User user, String plainPassword, String newTeamName) throws SQLException {
-
-        try (Connection con = Db.get()) {
-
-            // Turn off auto-commit so nothing is saved until commit() below.
-            con.setAutoCommit(false);
-
-            try {
-                if (newTeamName != null) {
-                    user.setTeamId(new TeamDAO().insert(con, newTeamName));
-                }
-
-                int userId = insertUser(con, user, PasswordHasher.hash(plainPassword));
-                insertRoleRow(con, userId, user);
-
-                con.commit();
-                user.setUserId(userId);
-                return userId;
-
-            } catch (SQLException e) {
-                con.rollback();              
-                throw e;
-            }
-        }
-    }
-
-    /** Step 2 of register: the users row. Returns the generated user_id. */
-    private int insertUser(Connection con, User user, String passwordHash) throws SQLException {
+    /** Adds the users row for a new account (FR1). Returns the generated user_id. */
+    public int insert(Connection con, User user, String passwordHash) throws SQLException {
 
         String sql = "INSERT INTO users "
                    + "(team_id, email, password_hash, display_name, phone, driver_number, role) "
@@ -123,10 +184,11 @@ public class UserDAO {
     }
 
     /**
-     * Step 3 of register: the subtype row. Only the key (and the driver
-     * number, which is NOT NULL) is known at sign-up
+     * Adds the subtype row (drivers, race_engineers or team_managers) for a
+     * new account. Only the key (and the driver number, which is NOT NULL) is
+     * known at sign-up
      */
-    private void insertRoleRow(Connection con, int userId, User user) throws SQLException {
+    public void insertRoleRow(Connection con, int userId, User user) throws SQLException {
 
         String sql = switch (user.getRole()) {
             case "Driver"   -> "INSERT INTO drivers (user_id, driver_number) VALUES (?, ?)";
