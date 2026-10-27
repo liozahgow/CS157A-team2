@@ -47,6 +47,19 @@
 </div>
 
 
+  <%-- Manager pages (FR3, FR4). ManagerFilter blocks everyone else anyway. --%>
+  <% if ("Manager".equals(user.getRole())) { %>
+  <p>
+    Manage your team:
+    <a href="${pageContext.request.contextPath}/app/roster">Team roster</a>
+    &nbsp;|&nbsp;
+    <a href="${pageContext.request.contextPath}/app/cars">Cars</a>
+    &nbsp;|&nbsp;
+    <a href="${pageContext.request.contextPath}/app/tires">Tire sets</a>
+  </p>
+  <% } %>
+
+
 <%-- ------------------------------ result area ------------------------------ --%>
 <div class="panel">
   <h2>Result</h2>

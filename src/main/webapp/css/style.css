@@ -63,6 +63,12 @@ th {
   text-align: left;
 }
 
+
+/* ---------- Manager pages (FR3, FR4) ---------- */
+.nav a {
+  margin-right: 14px;
+}
+
 /* ---------- Form controls do NOT inherit font or color ---------- */
 input, select, textarea, button {
   font-family: inherit;
