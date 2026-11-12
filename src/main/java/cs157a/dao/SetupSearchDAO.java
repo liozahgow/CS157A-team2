@@ -114,10 +114,13 @@ public class SetupSearchDAO {
     /** The tracks this team has actually been to, for the drop-down. */
     public List<Track> findTracksUsedByTeam(int teamId) throws SQLException {
 
-        String sql = "SELECT DISTINCT t.track_id, t.track_name, t.location, t.length_km, t.turns "
+        // GROUP BY collapses the repeats: a team that has been to one track
+        // five times still gets that track back once.
+        String sql = "SELECT t.track_id, t.track_name, t.location, t.length_km, t.turns "
                    + "FROM tracks t "
                    + "JOIN events e ON e.track_id = t.track_id "
                    + "WHERE e.team_id = ? "
+                   + "GROUP BY t.track_id, t.track_name, t.location, t.length_km, t.turns "
                    + "ORDER BY t.track_name";
 
         List<Track> tracks = new ArrayList<>();
@@ -149,10 +152,11 @@ public class SetupSearchDAO {
      */
     public List<String> findWeatherUsedByTeam(int teamId) throws SQLException {
 
-        String sql = "SELECT DISTINCT s.weather "
+        String sql = "SELECT s.weather "
                    + "FROM sessions s "
                    + "JOIN events e ON s.event_id = e.event_id "
                    + "WHERE e.team_id = ? AND s.weather IS NOT NULL "
+                   + "GROUP BY s.weather "
                    + "ORDER BY s.weather";
 
         List<String> weather = new ArrayList<>();
@@ -174,7 +178,8 @@ public class SetupSearchDAO {
     /** The car classes this team has run, for the drop-down. */
     public List<String> findCarClassesUsedByTeam(int teamId) throws SQLException {
 
-        String sql = "SELECT DISTINCT car_class FROM cars WHERE team_id = ? ORDER BY car_class";
+        String sql = "SELECT car_class FROM cars WHERE team_id = ? "
+                   + "GROUP BY car_class ORDER BY car_class";
 
         List<String> classes = new ArrayList<>();
 

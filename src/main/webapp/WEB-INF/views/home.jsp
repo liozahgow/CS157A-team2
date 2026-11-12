@@ -47,7 +47,7 @@
 </div>
 
 
-  <%-- Manager pages (FR3, FR4). ManagerFilter blocks everyone else anyway. --%>
+  <%-- Manager pages (FR3, FR4, FR5). ManagerFilter blocks everyone else anyway. --%>
   <% if ("Manager".equals(user.getRole())) { %>
   <p>
     Manage your team:
@@ -56,14 +56,26 @@
     <a href="${pageContext.request.contextPath}/app/cars">Cars</a>
     &nbsp;|&nbsp;
     <a href="${pageContext.request.contextPath}/app/tires">Tire sets</a>
+    &nbsp;|&nbsp;
+    <a href="${pageContext.request.contextPath}/app/events">Events</a>
   </p>
   <% } %>
 
-  <%-- Engineering pages (FR9). A manager may use them too. --%>
+  <%-- Engineering pages (FR6, FR7, FR8, FR9). A manager may use them too. --%>
   <% if ("Engineer".equals(user.getRole()) || "Manager".equals(user.getRole())) { %>
   <p>
     Engineering:
+    <a href="${pageContext.request.contextPath}/app/sessions">Sessions, laps and tires</a>
+    &nbsp;|&nbsp;
     <a href="${pageContext.request.contextPath}/app/setups">Best setup search</a>
+  </p>
+  <% } %>
+
+  <%-- Administrator page (FR10). --%>
+  <% if ("Admin".equals(user.getRole())) { %>
+  <p>
+    Administration:
+    <a href="${pageContext.request.contextPath}/app/admin">Team approval</a>
   </p>
   <% } %>
 

@@ -14,11 +14,11 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 /**
- * The FR9 pages are engineering tools. A Race Engineer may open them, and so
+ * The FR6, FR7, FR8 and FR9 pages are engineering tools. A Race Engineer may open them, and so
  * may a Team Manager, because the design says a manager can do everything an
  * engineer can. A Driver cannot: setups are not theirs to read.
  */
-@WebFilter("/app/setups")
+@WebFilter({"/app/setups", "/app/sessions", "/app/session"})
 public class EngineerFilter implements Filter {
 
     @Override

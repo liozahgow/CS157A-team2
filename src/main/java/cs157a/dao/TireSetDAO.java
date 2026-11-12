@@ -56,7 +56,7 @@ public class TireSetDAO {
      */
     public int nextSetNo(Connection con, int teamId) throws SQLException {
 
-        String sql = "SELECT COALESCE(MAX(set_no), 0) + 1 FROM tire_sets WHERE team_id = ?";
+        String sql = "SELECT MAX(set_no) AS highest FROM tire_sets WHERE team_id = ?";
 
         try (PreparedStatement ps = con.prepareStatement(sql)) {
 
@@ -64,7 +64,11 @@ public class TireSetDAO {
 
             try (ResultSet rs = ps.executeQuery()) {
                 rs.next();
-                return rs.getInt(1);
+                int highest = rs.getInt("highest");
+
+                // MAX of no rows is SQL NULL, which getInt reports as 0. The
+                // team has no sets yet, so the first one is number 1.
+                return rs.wasNull() ? 1 : highest + 1;
             }
         }
     }
@@ -108,6 +112,60 @@ public class TireSetDAO {
                 con.rollback();
                 throw e;
             }
+        }
+    }
+
+    /**
+     * One tire set, read inside a caller's transaction (FR7 needs to look at
+     * the heat cycle count and the status in the same transaction that
+     * updates them). Returns null when the team has no such set.
+     */
+    public TireSet findOne(Connection con, int teamId, int setNo) throws SQLException {
+
+        String sql = "SELECT team_id, set_no, compound, tire_size, received_date, "
+                   + "       heat_cycles, max_heat_cycles, status "
+                   + "FROM tire_sets "
+                   + "WHERE team_id = ? AND set_no = ?";
+
+        try (PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setInt(1, teamId);
+            ps.setInt(2, setNo);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                return rs.next() ? mapRow(rs) : null;
+            }
+        }
+    }
+
+    /**
+     * Adds one heat cycle to a set (FR7).
+     *
+     * The new value is worked out by the database from the current one, so
+     * two engineers saving at the same time cannot both read 5 and both
+     * write 6.
+     */
+    public void addHeatCycle(Connection con, int teamId, int setNo) throws SQLException {
+
+        String sql = "UPDATE tire_sets SET heat_cycles = heat_cycles + 1 "
+                   + "WHERE team_id = ? AND set_no = ?";
+
+        try (PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setInt(1, teamId);
+            ps.setInt(2, setNo);
+            ps.executeUpdate();
+        }
+    }
+
+    /** Same as setStatus below, but inside a caller's transaction. */
+    public void setStatus(Connection con, int teamId, int setNo, String status) throws SQLException {
+
+        String sql = "UPDATE tire_sets SET status = ? WHERE team_id = ? AND set_no = ?";
+
+        try (PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setString(1, status);
+            ps.setInt(2, teamId);
+            ps.setInt(3, setNo);
+            ps.executeUpdate();
         }
     }
 

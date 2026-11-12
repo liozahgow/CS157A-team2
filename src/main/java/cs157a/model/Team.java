@@ -18,6 +18,13 @@ public class Team {
     private String    status;
     private Timestamp createdAt;
 
+    // Not a column of teams. The admin page (FR10) counts the members of each
+    // team with a sub-query, and this is where that count is carried.
+    private int       memberCount;
+
+    public int getMemberCount()        { return memberCount; }
+    public void setMemberCount(int v)  { this.memberCount = v; }
+
     public int getTeamId()            { return teamId; }
     public void setTeamId(int v)      { this.teamId = v; }
 

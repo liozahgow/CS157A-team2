@@ -63,6 +63,57 @@ public class TeamDAO {
     }
 
     /** True when a team already uses this name. team_name is UNIQUE. */
+    /**
+     * FR10 - changes a team status: Pending, Approved or Suspended.
+     *
+     * The administrator is the only person who can call this, so there is no
+     * team id to scope by: an administrator belongs to no team and works on
+     * all of them.
+     */
+    public void updateStatus(int teamId, String status) throws SQLException {
+
+        String sql = "UPDATE teams SET status = ? WHERE team_id = ?";
+
+        try (Connection con = Db.get();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+
+            ps.setString(1, status);
+            ps.setInt(2, teamId);
+            ps.executeUpdate();
+        }
+    }
+
+    /**
+     * FR10 - every team with how many people are on it.
+     *
+     * The sub-query counts the members of each team. Writing it this way
+     * keeps the main query simple: a LEFT JOIN with GROUP BY would give the
+     * same answer but would have to group by every selected column.
+     */
+    public List<Team> findAllWithMemberCount() throws SQLException {
+
+        String sql = "SELECT t.team_id, t.team_name, t.series, t.invite_code, "
+                   + "       t.status, t.created_at, "
+                   + "       (SELECT COUNT(*) FROM users u "
+                   + "         WHERE u.team_id = t.team_id) AS member_count "
+                   + "FROM teams t "
+                   + "ORDER BY t.status, t.team_name";
+
+        List<Team> teams = new ArrayList<>();
+
+        try (Connection con = Db.get();
+             PreparedStatement ps = con.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+
+            while (rs.next()) {
+                Team t = mapRow(rs);
+                t.setMemberCount(rs.getInt("member_count"));
+                teams.add(t);
+            }
+        }
+        return teams;
+    }
+
     public boolean nameExists(String teamName) throws SQLException {
 
         String sql = "SELECT 1 FROM teams WHERE team_name = ?";

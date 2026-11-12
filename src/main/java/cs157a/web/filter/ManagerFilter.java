@@ -14,10 +14,10 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 /**
- * Only a Team Manager may open the FR3 / FR4 pages.
+ * Only a Team Manager may open the FR3 / FR4 / FR5 pages.
  * Everyone else gets "403 Forbidden".
  */
-@WebFilter({"/app/roster", "/app/cars", "/app/tires"})
+@WebFilter({"/app/roster", "/app/cars", "/app/tires", "/app/events"})
 public class ManagerFilter implements Filter {
 
     @Override

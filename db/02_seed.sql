@@ -203,16 +203,22 @@ INSERT INTO cars (team_id, chassis_no, model, car_class, active) VALUES
 INSERT INTO tire_sets
 (team_id, set_no, compound, heat_cycles, max_heat_cycles, tire_size, status, received_date)
 VALUES
-    (1,  1, 'Dry Medium', 2, 8, '205/50R15', 'Available', '2026-03-01'),
-    (2,  1, 'Dry Soft',   1, 5, '180/550R13', 'Available', '2026-03-03'),
-    (3,  1, 'Dry Medium', 3, 8, '245/40R17', 'Used',      '2026-03-05'),
-    (4,  1, 'Dry Hard',   2, 10,'245/40R17', 'Available', '2026-03-07'),
-    (5,  1, 'Dry Soft',   1, 5, '180/550R13', 'Available', '2026-03-09'),
-    (6,  1, 'Dry Medium', 4, 9, '205/50R15', 'Used',      '2026-03-11'),
-    (7,  1, 'Dry Soft',   2, 6, '300/680R18', 'Available', '2026-03-13'),
-    (8,  1, 'Dry Medium', 1, 6, '310/710R18', 'Available', '2026-03-15'),
-    (9,  1, 'Dry Soft',   2, 5, '180/550R13', 'Used',      '2026-03-17'),
-    (10, 1, 'Dry Medium', 1, 7, '325/680R18', 'Available', '2026-03-19');
+    (1,  1, 'Dry Medium', 2, 8, '205/50R15', 'In Use',  '2026-03-01'),
+    (2,  1, 'Dry Soft',   1, 5, '180/550R13', 'In Use',  '2026-03-03'),
+    (3,  1, 'Dry Medium', 3, 8, '245/40R17', 'In Use',  '2026-03-05'),
+    (4,  1, 'Dry Hard',   2, 10,'245/40R17', 'In Use',  '2026-03-07'),
+    (5,  1, 'Dry Soft',   1, 5, '180/550R13', 'In Use',  '2026-03-09'),
+    (6,  1, 'Dry Medium', 4, 9, '205/50R15', 'In Use',  '2026-03-11'),
+    (7,  1, 'Dry Soft',   2, 6, '300/680R18', 'In Use',  '2026-03-13'),
+    (8,  1, 'Dry Medium', 1, 6, '310/710R18', 'In Use',  '2026-03-15'),
+    (9,  1, 'Dry Soft',   2, 5, '180/550R13', 'In Use',  '2026-03-17'),
+    (10, 1, 'Dry Medium', 1, 7, '325/680R18', 'In Use',  '2026-03-19'),
+
+    -- Two more sets for Apex Racing so one team shows all three statuses.
+    -- A set is New until it has been on the car, In Use once it has run, and
+    -- Retired when it has used up its heat cycles.
+    (1,  2, 'Dry Soft',   0, 6, '205/50R15', 'New',     '2026-09-14'),
+    (1,  3, 'Wet',        5, 5, '205/50R15', 'Retired', '2026-02-20');
 
 -- ------------------------------------------------------------- car_setups ---
 INSERT INTO car_setups
